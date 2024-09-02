@@ -57,6 +57,8 @@ public class AssetService extends LoggerSupport {
         }
     }
 
+    // 用户存入资产，调用 tryTransfer() 方法，不需要检查余额，此操作可以认为直接从负债账户向用户转账
+    // 其它操作均需要检查余额
     public void transfer(Transfer type, Long fromUser, Long toUser, AssetEnum assetId, BigDecimal amount) {
         if (!tryTransfer(type, fromUser, toUser, assetId, amount, true)) {
             throw new RuntimeException("Transfer failed for " + type + ", from user " + fromUser + " to user " + toUser
@@ -69,30 +71,38 @@ public class AssetService extends LoggerSupport {
 
     public boolean tryTransfer(Transfer type, Long fromUser, Long toUser, AssetEnum assetId, BigDecimal amount,
             boolean checkBalance) {
+        // 转账金额不能为负
         if (amount.signum() == 0) {
             return true;
         }
         if (amount.signum() < 0) {
             throw new IllegalArgumentException("Negative amount");
         }
+        // 获取源用户资产
         Asset fromAsset = getAsset(fromUser, assetId);
         if (fromAsset == null) {
-            fromAsset = initAssets(fromUser, assetId);
+            fromAsset = initAssets(fromUser, assetId);  // 资产不存在时初始化用户资产
         }
+        // 获取目标用户资产
         Asset toAsset = getAsset(toUser, assetId);
         if (toAsset == null) {
             toAsset = initAssets(toUser, assetId);
         }
         return switch (type) {
         case AVAILABLE_TO_AVAILABLE -> {
+            // 可用转可用
             // 需要检查余额且余额不足:
             if (checkBalance && fromAsset.available.compareTo(amount) < 0) {
                 yield false;
             }
+            // 源用户的可用资产减少
             fromAsset.available = fromAsset.available.subtract(amount);
+            // 目标用户的可用资产增加
             toAsset.available = toAsset.available.add(amount);
+            // 返回成功
             yield true;
         }
+        // 可用转冻结
         case AVAILABLE_TO_FROZEN -> {
             // 需要检查余额且余额不足:
             if (checkBalance && fromAsset.available.compareTo(amount) < 0) {
@@ -102,6 +112,7 @@ public class AssetService extends LoggerSupport {
             toAsset.frozen = toAsset.frozen.add(amount);
             yield true;
         }
+        // 冻结转可用
         case FROZEN_TO_AVAILABLE -> {
             // 需要检查余额且余额不足:
             if (checkBalance && fromAsset.frozen.compareTo(amount) < 0) {

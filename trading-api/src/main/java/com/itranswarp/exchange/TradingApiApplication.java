@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itranswarp.exchange.client.RestClient;
 
+// 交易api服务
 @SpringBootApplication
 public class TradingApiApplication {
 

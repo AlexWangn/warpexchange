@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itranswarp.exchange.client.RestClient;
 
+//给交易员提供一个Web操作界面，并把交易员的操作转发给后端API。
 @SpringBootApplication
 public class UIApplication {
 

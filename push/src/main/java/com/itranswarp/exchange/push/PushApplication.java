@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
  * WebSocket push based on VertX.
+ * 推送服务
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class) // 禁用数据库自动配置 (无DataSource, JdbcTemplate...)
