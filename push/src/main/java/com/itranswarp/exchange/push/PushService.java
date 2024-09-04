@@ -28,7 +28,7 @@ public class PushService extends LoggerSupport {
     @Value("${spring.redis.standalone.host:localhost}")
     private String redisHost;
 
-    @Value("${spring.redis.standalone.port:6379}")
+    @Value("${spring.redis.standalone.port:6666}")
     private int redisPort;
 
     @Value("${spring.redis.standalone.password:}")

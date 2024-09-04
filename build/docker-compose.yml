@@ -31,7 +31,7 @@ services:
     image: redis:6.2
     container_name: redis
     ports:
-      - "6379:6379"
+      - "6666:6379"
     volumes:
       - "./docker/redis-data:/data"
 

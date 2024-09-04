@@ -67,9 +67,10 @@ spring:
       max-partition-fetch-bytes: ${KAFKA_MAX_PARTITION_FETCH_BYTES:1000000}
 
   # redis configuration:
+  # corp 本地6379端口一直有什么问题，就是链接不上docker，无奈换一个端口，目前可以了。
   redis:
     host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+    port: ${REDIS_PORT:6666}
     password: ${REDIS_PASSWORD:}
     database: ${REDIS_DATABASE:0}
 
