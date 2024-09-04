@@ -11,7 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itranswarp.exchange.client.RestClient;
 
-//给交易员提供一个Web操作界面，并把交易员的操作转发给后端API。
+// 给交易员提供一个Web操作界面，并把交易员的操作转发给后端API。
+// UI相当于一个单独的服务，因此请求tradeapi时，也需要经过http请求，它本身不是交易入口，它通过转发JavaScript请求到真正的API接口。
+// 因此这里要做一层代理。
+
 @SpringBootApplication
 public class UIApplication {
 

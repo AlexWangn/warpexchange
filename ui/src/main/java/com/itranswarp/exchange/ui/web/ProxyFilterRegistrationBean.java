@@ -43,6 +43,7 @@ public class ProxyFilterRegistrationBean extends FilterRegistrationBean<Filter> 
     @Value("#{exchangeConfiguration.hmacKey}")
     String hmacKey;
 
+    // 另外一个过滤器，进行代理
     @PostConstruct
     public void init() {
         ProxyFilter filter = new ProxyFilter();

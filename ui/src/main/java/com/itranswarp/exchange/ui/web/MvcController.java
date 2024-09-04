@@ -67,7 +67,7 @@ public class MvcController extends LoggerSupport {
     }
 
     /**
-     * Index page.
+     * Index page. 显示登录页
      */
     @GetMapping("/")
     public ModelAndView index() {
@@ -85,6 +85,13 @@ public class MvcController extends LoggerSupport {
         return prepareModelAndView("signup");
     }
 
+    /**
+     * Signin page. 登录
+     * @param email
+     * @param name
+     * @param password
+     * @return
+     */
     @PostMapping("/signup")
     public ModelAndView signup(@RequestParam("email") String email, @RequestParam("name") String name,
             @RequestParam("password") String password) {

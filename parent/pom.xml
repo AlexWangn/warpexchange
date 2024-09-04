@@ -21,7 +21,7 @@
 
 		<java.version>17</java.version>
 
-		<!-- artifact version -->
+		<!-- artifact version 统一的版本管理，都放在这里-->
 		<pebble.version>3.2.0</pebble.version>
 		<springcloud.version>2022.0.0</springcloud.version>
 		<springdoc.version>2.0.0</springdoc.version>

@@ -14,6 +14,9 @@ import com.itranswarp.exchange.model.trade.OrderEntity;
 import com.itranswarp.exchange.order.OrderService;
 import com.itranswarp.exchange.support.LoggerSupport;
 
+/**
+ * 清算系统，处理撮合结果，涉及到账户资金变动。
+ */
 @Component
 public class ClearingService extends LoggerSupport {
 
@@ -26,6 +29,12 @@ public class ClearingService extends LoggerSupport {
         this.orderService = orderService;
     }
 
+    /**
+     * 两种情况：1. 如果是买入的话，如果你买入价格比挂单高，以挂单价格成交，也即以低价格成交。
+     *         2. 如果是卖出的话，如果你卖出价格比挂单低，以挂单价格成交，也即以挂单高价格成交。
+     * 两种情况都以对手盘为为准。
+     * @param result
+     */
     public void clearMatchResult(MatchResult result) {
         OrderEntity taker = result.takerOrder;
         switch (taker.direction) {
@@ -69,6 +78,7 @@ public class ClearingService extends LoggerSupport {
                             detail.price(), detail.quantity(), detail.takerOrder().id, detail.makerOrder().id,
                             detail.takerOrder().userId, detail.makerOrder().userId);
                 }
+                // maker挂单，taker吃单
                 OrderEntity maker = detail.makerOrder();
                 BigDecimal matched = detail.quantity();
                 // 卖方BTC转入买方账户:

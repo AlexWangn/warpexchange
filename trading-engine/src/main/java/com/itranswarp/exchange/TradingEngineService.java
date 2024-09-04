@@ -372,6 +372,10 @@ public class TradingEngineService extends LoggerSupport {
         return ok;
     }
 
+    /**
+     * 重要，关于对订单创建后，一系列操作。
+     * @param event
+     */
     void createOrder(OrderRequestEvent event) {
         ZonedDateTime zdt = Instant.ofEpochMilli(event.createdAt).atZone(zoneId);
         int year = zdt.getYear();
@@ -385,7 +389,9 @@ public class TradingEngineService extends LoggerSupport {
             this.apiResultQueue.add(ApiResultMessage.createOrderFailed(event.refId, event.createdAt));
             return;
         }
+        // 撮合订单
         MatchResult result = this.matchEngine.processOrder(event.sequenceId, order);
+        // 处理撮合结果
         this.clearingService.clearMatchResult(result);
         // 推送成功结果,注意必须复制一份OrderEntity,因为将异步序列化:
         this.apiResultQueue.add(ApiResultMessage.orderSuccess(event.refId, order.copy(), event.createdAt));

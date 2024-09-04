@@ -6,6 +6,10 @@ import java.util.List;
 
 import com.itranswarp.exchange.model.trade.OrderEntity;
 
+/**
+ * 匹配成功的结果，takeorder 为吃单的订单，matchDetails 为匹配成功的明细。
+ *
+ */
 public class MatchResult {
 
     public final OrderEntity takerOrder;

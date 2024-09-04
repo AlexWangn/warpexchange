@@ -41,6 +41,7 @@ public class UIFilterRegistrationBean extends FilterRegistrationBean<Filter> {
         setOrder(100);
     }
 
+    // 用于验证cookie并把特定用户的身份绑定到 UserContext中
     class UIFilter extends AbstractFilter {
 
         @Override

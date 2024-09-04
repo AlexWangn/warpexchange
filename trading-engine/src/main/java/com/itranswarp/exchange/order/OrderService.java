@@ -15,23 +15,33 @@ import com.itranswarp.exchange.enums.AssetEnum;
 import com.itranswarp.exchange.enums.Direction;
 import com.itranswarp.exchange.model.trade.OrderEntity;
 
+// 保持单例模式，为了在一台机器上进行唯一的定序操作
 @Component
 public class OrderService {
 
     final AssetService assetService;
 
+    // 构造器引入，单例模式
     public OrderService(@Autowired AssetService assetService) {
         this.assetService = assetService;
     }
 
-    // 跟踪所有活动订单:
+    // 跟踪所有活动订单: Order ID => OrderEntity
     final ConcurrentMap<Long, OrderEntity> activeOrders = new ConcurrentHashMap<>();
 
-    // 跟踪用户活动订单:
+    // 跟踪用户活动订单: User ID => Map(Order ID => OrderEntity)，一个用户id可以有多个下单，但一个订单id只能有一个下单
     final ConcurrentMap<Long, ConcurrentMap<Long, OrderEntity>> userOrders = new ConcurrentHashMap<>();
 
     /**
      * 创建订单，失败返回null:
+     * @param sequenceId：定序id，相同价格的订单根据定序ID进行排序
+     * @param ts：时间戳，timestamp
+     * @param orderId：订单ID
+     * @param userId：订单关联的用户id
+     * @param direction：订单方向；买或卖
+     * @param price：订单价格
+     * @param quantity：订单数量
+     * @return
      */
     public OrderEntity createOrder(long sequenceId, long ts, Long orderId, Long userId, Direction direction,
             BigDecimal price, BigDecimal quantity) {
@@ -50,6 +60,7 @@ public class OrderService {
         }
         default -> throw new IllegalArgumentException("Invalid direction.");
         }
+        // 实例化Order
         OrderEntity order = new OrderEntity();
         order.id = orderId;
         order.sequenceId = sequenceId;

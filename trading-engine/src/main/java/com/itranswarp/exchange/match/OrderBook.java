@@ -19,6 +19,7 @@ public class OrderBook {
 
     public OrderBook(Direction direction) {
         this.direction = direction;
+        // TreeMap是有序的，默认是升序，所以需要根据方向（提供的Comparator）来设置排序规则。
         this.book = new TreeMap<>(direction == Direction.BUY ? SORT_BUY : SORT_SELL);
     }
 
@@ -91,6 +92,7 @@ public class OrderBook {
         }
     };
 
+    // 排序器，根据价格高在前，时间在前。
     private static final Comparator<OrderKey> SORT_BUY = new Comparator<>() {
         @Override
         public int compare(OrderKey o1, OrderKey o2) {

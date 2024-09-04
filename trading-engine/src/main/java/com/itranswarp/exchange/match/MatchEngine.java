@@ -9,12 +9,18 @@ import com.itranswarp.exchange.enums.Direction;
 import com.itranswarp.exchange.enums.OrderStatus;
 import com.itranswarp.exchange.model.trade.OrderEntity;
 
+/**
+ * 单撮合引擎，可以设计为多个撮合引擎，每个撮合引擎处理不同的交易对。同时共享订单簿和售卖簿。
+ */
 @Component
 public class MatchEngine {
 
+    // 订单簿
     public final OrderBook buyBook = new OrderBook(Direction.BUY);
+    // 售卖簿
     public final OrderBook sellBook = new OrderBook(Direction.SELL);
     public BigDecimal marketPrice = BigDecimal.ZERO; // 最新市场价
+    // 定序ID
     private long sequenceId;
 
     public MatchResult processOrder(long sequenceId, OrderEntity order) {
@@ -26,6 +32,9 @@ public class MatchEngine {
     }
 
     /**
+     * 处理订单
+     * 挂在买卖盘的订单被称为挂单、当前正在处理的订单称为吃单。
+     * 一个Taker订单如果对手盘不存在，则转为Maker挂在买卖盘上。
      * @param takerOrder  输入订单
      * @param makerBook   尝试匹配成交的OrderBook
      * @param anotherBook 未能完全成交后挂单的OrderBook
@@ -50,7 +59,7 @@ public class MatchEngine {
                 // 卖出订单价格比买盘第一档价格高:
                 break;
             }
-            // 以Maker价格成交:
+            // 以Maker价格成交:以对手盘的价格成交
             this.marketPrice = makerOrder.price;
             // 待成交数量为两者较小值:
             BigDecimal matchedQuantity = takerUnfilledQuantity.min(makerOrder.unfilledQuantity);

@@ -2,8 +2,10 @@ package com.itranswarp.exchange.enums;
 
 public enum Direction {
 
+    // 买入
     BUY(1),
 
+    // 卖出
     SELL(0);
 
     /**

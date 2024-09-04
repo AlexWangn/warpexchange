@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.itranswarp.exchange.enums.AssetEnum;
 import com.itranswarp.exchange.support.LoggerSupport;
 
+// 这里不能有并发操作，因为统一用户必须保持单线程修改数据。
 @Component
 public class AssetService extends LoggerSupport {
 
